@@ -68,16 +68,16 @@ def predict_label_final(img_path, threshold=0.5):
 @app.route("/predict", methods=["POST"])
 def predict():
     
-#     message = request.get_json(force=True)
-#     encoded = message['image']
-#     decoded = base64.b64decode(encoded)
-#     image = Image.open(io.BytesIO(decoded))
+    message = request.get_json(force=True)
+    encoded = message['image']
+    decoded = base64.b64decode(encoded)
+    image = Image.open(io.BytesIO(decoded))
     
-#     print(f' * image:  {image}')
+    print(f' * image:  {image}')
 
-#     # Save the image to a temporary file
-#     temp_image_path = "./testImages/testimage.jpg"
-#     image.save(temp_image_path)
+    # Save the image to a temporary file
+    temp_image_path = "./testImages/testimage.jpg"
+    image.save(temp_image_path)
 
 #     # Example usage
 # #     img_path = 'C:/Users/Jeevake/Weed/Weed/TestData/Cyperus Rotundusare/Cyperus_Rotundusare_17.jpg'
