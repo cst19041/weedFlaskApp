@@ -1,11 +1,11 @@
 import base64
 import numpy as np
 import io
-import os
+#import os
 from PIL import Image
 import keras
-from keras import backend as K
-from keras.models import Sequential
+#from keras import backend as K
+#from keras.models import Sequential
 # from keras.preprocessing.image import ImageDataGenerator
 # from keras.preprocessing.image import img_to_array
 from flask import request
@@ -17,8 +17,8 @@ import tensorflow
 import joblib
 from tensorflow.keras.models import Model,load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from tensorflow.keras.layers import Input
-from tensorflow.keras.layers import InputLayer
+#from tensorflow.keras.layers import Input
+#from tensorflow.keras.layers import InputLayer
 
 app = Flask(__name__)
 CORS(app)
