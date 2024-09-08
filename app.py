@@ -76,7 +76,7 @@ def predict():
     print(f' * image:  {image}')
 
     # Save the image to a temporary file
-    temp_image_path = "C:/Users/Jeevake/Weed/testimage.jpg"
+    temp_image_path = "./testImages/testimage.jpg"
     image.save(temp_image_path)
 
     # Example usage
