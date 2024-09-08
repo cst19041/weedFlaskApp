@@ -65,8 +65,8 @@ def predict_label_final(img_path, threshold=0.5):
 
 # get_model()
 
-app = Flask(__name__)
-CORS(app)
+# app = Flask(__name__)
+# CORS(app)
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -79,9 +79,10 @@ def predict():
     print(f' * image:  {image}')
 
     # Save the image to a temporary file
-    temp_image_path = "./testImages/testimage.jpg"
-    image.save(temp_image_path)
-    print(f'temp_image_path: {temp_image_path}')
+    temp_image_path = "./testImages/orange.jpg"
+    # temp_image_path = "./testImages/testimage.jpg"
+    # image.save(temp_image_path)
+    # print(f'temp_image_path: {temp_image_path}')
 
     # Example usage
 #     img_path = 'C:/Users/Jeevake/Weed/Weed/TestData/Cyperus Rotundusare/Cyperus_Rotundusare_17.jpg'
