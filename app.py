@@ -89,6 +89,13 @@ def predict():
 
     # print(f'Predicted label for the image: {predicted_label}')
     # print(f'Confidence level: {confidence}')
+
+    try:
+        predicted_label, confidence = predict_label_final(temp_image_path)
+        print(f'Predicted label for the image: {predicted_label}')
+        print(f'Confidence level: {confidence}')
+    except Exception as e:
+        print(f'Error during prediction: {e}')
     
 #     if predicted_label == 0 and confidence > 0.50:
 #         output_name = "Cyperus Rotundusare"
