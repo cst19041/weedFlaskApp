@@ -65,6 +65,9 @@ def predict_label_final(img_path, threshold=0.5):
 
 # get_model()
 
+app = Flask(__name__)
+CORS(app)
+
 @app.route("/predict", methods=["POST"])
 def predict():
     
