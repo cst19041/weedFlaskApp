@@ -81,7 +81,7 @@ def predict():
 
 #     # Example usage
 # #     img_path = 'C:/Users/Jeevake/Weed/Weed/TestData/Cyperus Rotundusare/Cyperus_Rotundusare_17.jpg'
-#     predicted_label, confidence = predict_label_final(temp_image_path)
+    predicted_label, confidence = predict_label_final(temp_image_path)
 
 #     print(f'Predicted label for the image: {predicted_label}')
 #     print(f'Confidence level: {confidence}')
