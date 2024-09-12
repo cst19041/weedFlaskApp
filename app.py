@@ -65,9 +65,6 @@ def predict_label_final(img_path, threshold=0.5):
 
 # get_model()
 
-# app = Flask(__name__)
-# CORS(app)
-
 @app.route("/predict", methods=["POST"])
 def predict():
     
@@ -79,41 +76,32 @@ def predict():
     print(f' * image:  {image}')
 
     # Save the image to a temporary file
-    temp_image_path = "./testImages/orange.jpg"
-    # temp_image_path = "./testImages/testimage.jpg"
-    # image.save(temp_image_path)
-    # print(f'temp_image_path: {temp_image_path}')
+    temp_image_path = "./testimage.jpg"
+    image.save(temp_image_path)
 
     # Example usage
 #     img_path = 'C:/Users/Jeevake/Weed/Weed/TestData/Cyperus Rotundusare/Cyperus_Rotundusare_17.jpg'
-    # predicted_label, confidence = predict_label_final(temp_image_path)
+    predicted_label, confidence = predict_label_final(temp_image_path)
 
-    # print(f'Predicted label for the image: {predicted_label}')
-    # print(f'Confidence level: {confidence}')
-
-    try:
-        predicted_label, confidence = predict_label_final(temp_image_path)
-        print(f'Predicted label for the image: {predicted_label}')
-        print(f'Confidence level: {confidence}')
-    except Exception as e:
-        print(f'Error during prediction: {e}')
+    print(f'Predicted label for the image: {predicted_label}')
+    print(f'Confidence level: {confidence}')
     
-#     if predicted_label == 0 and confidence > 0.50:
-#         output_name = "Cyperus Rotundusare"
-#     elif predicted_label == 1 and confidence > 0.50:
-#         output_name = "Echinocola  Crusgulli"
-#     elif predicted_label == 2 and confidence > 0.50:
-#         output_name = "Echinocola Colona"
-#     elif predicted_label == 3 and confidence > 0.50:
-#         output_name = "Ludwigia Perennis"
-#     elif predicted_label == 4 and confidence > 0.50:
-#         output_name = "Monochoria Vaginalis"
-#     else:
-#         output_name = "Uncertain"
+    if predicted_label == 0 and confidence > 0.50:
+        output_name = "Cyperus Rotundusare"
+    elif predicted_label == 1 and confidence > 0.50:
+        output_name = "Echinocola  Crusgulli"
+    elif predicted_label == 2 and confidence > 0.50:
+        output_name = "Echinocola Colona"
+    elif predicted_label == 3 and confidence > 0.50:
+        output_name = "Ludwigia Perennis"
+    elif predicted_label == 4 and confidence > 0.50:
+        output_name = "Monochoria Vaginalis"
+    else:
+        output_name = "Uncertain"
 
     response = {
         'prediction': {
-            'output': "output_name",
+            'output': output_name,
         }
     }
     return jsonify(response)
