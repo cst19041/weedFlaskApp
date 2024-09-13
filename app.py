@@ -67,45 +67,49 @@ def predict_label_final(image, threshold=0.5):
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    
-   # Ensure an image file is present in the request
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image file in the request'}), 400
+    try: 
+        # Ensure an image file is present in the request
+        if 'image' not in request.files:
+            return jsonify({'error': 'No image file in the request'}), 400
 
-    # Retrieve the image file
-    file = request.files['image']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-    
-    # Open the image file
-    image = Image.open(file.stream)
-    print(f' * Image: {image}')
+        # Retrieve the image file
+        file = request.files['image']
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+        
+        # Open the image file
+        image = Image.open(file.stream)
+        print(f' * Image: {image}')
 
-    # Example usage
-    predicted_label, confidence = predict_label_final(image)
+        # Example usage
+        predicted_label, confidence = predict_label_final(image)
 
-    print(f'Predicted label for the image: {predicted_label}')
-    print(f'Confidence level: {confidence}')
-    
-    if predicted_label == 0 and confidence > 0.50:
-        output_name = "Cyperus Rotundusare"
-    elif predicted_label == 1 and confidence > 0.50:
-        output_name = "Echinocola  Crusgulli"
-    elif predicted_label == 2 and confidence > 0.50:
-        output_name = "Echinocola Colona"
-    elif predicted_label == 3 and confidence > 0.50:
-        output_name = "Ludwigia Perennis"
-    elif predicted_label == 4 and confidence > 0.50:
-        output_name = "Monochoria Vaginalis"
-    else:
-        output_name = "Uncertain"
+        print(f'Predicted label for the image: {predicted_label}')
+        print(f'Confidence level: {confidence}')
+        
+        if predicted_label == 0 and confidence > 0.50:
+            output_name = "Cyperus Rotundusare"
+        elif predicted_label == 1 and confidence > 0.50:
+            output_name = "Echinocola  Crusgulli"
+        elif predicted_label == 2 and confidence > 0.50:
+            output_name = "Echinocola Colona"
+        elif predicted_label == 3 and confidence > 0.50:
+            output_name = "Ludwigia Perennis"
+        elif predicted_label == 4 and confidence > 0.50:
+            output_name = "Monochoria Vaginalis"
+        else:
+            output_name = "Uncertain"
 
-    response = {
-        'prediction': {
-            'output': output_name,
+        response = {
+            'prediction': {
+                'output': output_name,
+            }
         }
-    }
-    return jsonify(response)
+        return jsonify(response)
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=True)
