@@ -23,21 +23,28 @@ from tensorflow.keras.layers import InputLayer
 app = Flask(__name__)
 CORS(app)
 
-# Load the models
-cnn_model = load_model('models/final_model.h5')
-rf_model = joblib.load('models/random_forest_model.pkl')
+# Global variables to hold models, will be lazily loaded
+cnn_model = None
+rf_model = None
+intermediate_layer_model = None
 
-print(" * Loaded models...")
-print(f' * Tensorflow Version:  {tensorflow.__version__}')
-
-import sklearn
-print(sklearn.__version__)
-
-# Define the layer for feature extraction
-layer_name = 'global_average_pooling2d'
-intermediate_layer_model = Model(
-[cnn_model.inputs],
-[cnn_model.get_layer(layer_name).output])
+def load_models():
+    global cnn_model, rf_model, intermediate_layer_model
+    
+    if cnn_model is None:
+        cnn_model = load_model('models/final_model.h5')
+    
+    if rf_model is None:
+        rf_model = joblib.load('models/random_forest_model.pkl')
+    
+    if intermediate_layer_model is None:
+        layer_name = 'global_average_pooling2d'
+        intermediate_layer_model = tf.keras.models.Model(
+            [cnn_model.inputs],
+            [cnn_model.get_layer(layer_name).output]
+        )
+    print(" * Models loaded successfully")
+    return cnn_model, rf_model, intermediate_layer_model
 
 def extract_features_final(intermediate_layer_model, img):
     img = img_to_array(img)
@@ -47,6 +54,8 @@ def extract_features_final(intermediate_layer_model, img):
     return features.flatten()  # Flatten
 
 def predict_label_final(image, threshold=0.5):
+    cnn_model, rf_model, intermediate_layer_model = load_models()
+    
     img = image.resize((255, 255))  
     features = extract_features_final(intermediate_layer_model, img)
     
