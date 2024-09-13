@@ -1,11 +1,11 @@
 import base64
 import numpy as np
 import io
-#import os
+import os
 from PIL import Image
 import keras
-#from keras import backend as K
-#from keras.models import Sequential
+from keras import backend as K
+from keras.models import Sequential
 # from keras.preprocessing.image import ImageDataGenerator
 # from keras.preprocessing.image import img_to_array
 from flask import request
@@ -17,8 +17,8 @@ import tensorflow
 import joblib
 from tensorflow.keras.models import Model,load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
-#from tensorflow.keras.layers import Input
-#from tensorflow.keras.layers import InputLayer
+from tensorflow.keras.layers import Input
+from tensorflow.keras.layers import InputLayer
 
 app = Flask(__name__)
 CORS(app)
@@ -46,8 +46,8 @@ def extract_features_final(intermediate_layer_model, img):
     features = intermediate_layer_model.predict(img)
     return features.flatten()  # Flatten
 
-def predict_label_final(img_path, threshold=0.5):
-    img = load_img(img_path, target_size=(255, 255))
+def predict_label_final(image, threshold=0.5):
+    img = image.resize((255, 255))  
     features = extract_features_final(intermediate_layer_model, img)
     
     # Get probabilities for each class
@@ -67,48 +67,45 @@ def predict_label_final(img_path, threshold=0.5):
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    try:
-        message = request.get_json(force=True)
-        encoded = message['image']
-        decoded = base64.b64decode(encoded)
-        image = Image.open(io.BytesIO(decoded))
-        
-        print(f' * image:  {image}')
+    
+   # Ensure an image file is present in the request
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image file in the request'}), 400
 
-        # Save the image to a temporary file
-        temp_image_path = "./testimage.jpg"
-        image.save(temp_image_path)
+    # Retrieve the image file
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    
+    # Open the image file
+    image = Image.open(file.stream)
+    print(f' * Image: {image}')
 
-    #     # Example usage
-    # #     img_path = 'C:/Users/Jeevake/Weed/Weed/TestData/Cyperus Rotundusare/Cyperus_Rotundusare_17.jpg'
-        predicted_label, confidence = predict_label_final(temp_image_path)
+    # Example usage
+    predicted_label, confidence = predict_label_final(image)
 
-    #     print(f'Predicted label for the image: {predicted_label}')
-    #     print(f'Confidence level: {confidence}')
-        
-    #     if predicted_label == 0 and confidence > 0.50:
-    #         output_name = "Cyperus Rotundusare"
-    #     elif predicted_label == 1 and confidence > 0.50:
-    #         output_name = "Echinocola  Crusgulli"
-    #     elif predicted_label == 2 and confidence > 0.50:
-    #         output_name = "Echinocola Colona"
-    #     elif predicted_label == 3 and confidence > 0.50:
-    #         output_name = "Ludwigia Perennis"
-    #     elif predicted_label == 4 and confidence > 0.50:
-    #         output_name = "Monochoria Vaginalis"
-    #     else:
-    #         output_name = "Uncertain"
+    print(f'Predicted label for the image: {predicted_label}')
+    print(f'Confidence level: {confidence}')
+    
+    if predicted_label == 0 and confidence > 0.50:
+        output_name = "Cyperus Rotundusare"
+    elif predicted_label == 1 and confidence > 0.50:
+        output_name = "Echinocola  Crusgulli"
+    elif predicted_label == 2 and confidence > 0.50:
+        output_name = "Echinocola Colona"
+    elif predicted_label == 3 and confidence > 0.50:
+        output_name = "Ludwigia Perennis"
+    elif predicted_label == 4 and confidence > 0.50:
+        output_name = "Monochoria Vaginalis"
+    else:
+        output_name = "Uncertain"
 
-        response = {
-            'prediction': {
-                'output': "output_name",
-            }
+    response = {
+        'prediction': {
+            'output': output_name,
         }
-        return jsonify(response)
+    }
+    return jsonify(response)
 
-    except Exception as e:
-            # Catch any error and return it in the response
-        response = {
-            'error': str(e)
-        }
-        return jsonify(response), 500
+if __name__ == '__main__':
+    app.run(debug=True)
