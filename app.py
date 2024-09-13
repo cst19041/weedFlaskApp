@@ -86,15 +86,15 @@ def predict():
         print(f'Confidence level: {confidence}')
         
         # Classify based on the predicted label and confidence
-        if predicted_label == 0 and confidence > 0.50:
+        if predicted_label == 0 and confidence > 0.80:
             output_name = "Cyperus Rotundusare"
-        elif predicted_label == 1 and confidence > 0.50:
+        elif predicted_label == 1 and confidence > 0.80:
             output_name = "Echinocola Crusgulli"
-        elif predicted_label == 2 and confidence > 0.50:
+        elif predicted_label == 2 and confidence > 0.80:
             output_name = "Echinocola Colona"
-        elif predicted_label == 3 and confidence > 0.50:
+        elif predicted_label == 3 and confidence > 0.80:
             output_name = "Ludwigia Perennis"
-        elif predicted_label == 4 and confidence > 0.50:
+        elif predicted_label == 4 and confidence > 0.80:
             output_name = "Monochoria Vaginalis"
         else:
             output_name = "Uncertain"
