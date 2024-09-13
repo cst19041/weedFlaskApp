@@ -13,7 +13,7 @@ from flask import jsonify
 from flask import Flask
 from flask_cors import CORS
 
-import tensorflow
+import tensorflow as tf
 import joblib
 from tensorflow.keras.models import Model,load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
