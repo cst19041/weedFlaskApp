@@ -3,22 +3,13 @@ import numpy as np
 import io
 import os
 from PIL import Image
-import keras
-from keras import backend as K
-from keras.models import Sequential
-# from keras.preprocessing.image import ImageDataGenerator
-# from keras.preprocessing.image import img_to_array
-from flask import request
-from flask import jsonify
-from flask import Flask
+from flask import request, jsonify, Flask
 from flask_cors import CORS
 
 import tensorflow as tf
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.image import img_to_array
 import joblib
-from tensorflow.keras.models import Model,load_model
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from tensorflow.keras.layers import Input
-from tensorflow.keras.layers import InputLayer
 
 app = Flask(__name__)
 CORS(app)
@@ -72,8 +63,6 @@ def predict_label_final(image, threshold=0.5):
     else:
         return "Uncertain", max_prob
 
-# get_model()
-
 @app.route("/predict", methods=["POST"])
 def predict():
     try: 
@@ -96,10 +85,11 @@ def predict():
         print(f'Predicted label for the image: {predicted_label}')
         print(f'Confidence level: {confidence}')
         
+        # Classify based on the predicted label and confidence
         if predicted_label == 0 and confidence > 0.50:
             output_name = "Cyperus Rotundusare"
         elif predicted_label == 1 and confidence > 0.50:
-            output_name = "Echinocola  Crusgulli"
+            output_name = "Echinocola Crusgulli"
         elif predicted_label == 2 and confidence > 0.50:
             output_name = "Echinocola Colona"
         elif predicted_label == 3 and confidence > 0.50:
